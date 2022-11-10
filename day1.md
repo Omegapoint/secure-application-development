@@ -184,6 +184,43 @@ Solving the Find the hidden easter egg challenge was probably no as satisfying a
 4. ROT13-decode this into `/the/devs/are/so/funny/they/hid/an/easter/egg/within/the/easter/egg`
 5. Visit http://localhost:3000/the/devs/are/so/funny/they/hid/an/easter/egg/within/the/easter/egg
 
+#### Access Log ⭐⭐⭐⭐
+
+The Juice Shop application server is writing access logs, which can contain interesting information that competitors might also be interested in.
+
+* Normally, server log files are written to disk on server side and are not accessible from the outside.
+* Which raises the question: Who would want a server access log to be accessible through a web application?
+* One particular file found in the folder you might already have found during the Access a confidential document challenge might give you an idea who is interested in such a public exposure.
+* Drilling down one level into the file system might not be sufficient.
+
+##### Solution
+
+1. Solve the Access a confidential document or any related challenges which will bring the exposed /ftp folder to your attention.
+2. Visit http://localhost:3000/ftp and notice the file incident-support.kdbx which is needed for Log in with the support team's original user credentials and indicates that some support team is performing its duties from the public Internet and possibly with VPN access.
+3. Guess luckily or run a brute force attack with e.g. OWASP ZAPs DirBuster plugin for a possibly exposed directory containing the log files.
+4. Following the hint to drill down deeper than one level, you will at some point end up with http://localhost:3000/support/logs.
+5. Inside you will find at least one access.log of the current day. Open or download it to solve this challenge.
+
+#### GDPR Data Theft ⭐⭐⭐⭐
+
+In order to comply with GDPR, the Juice Shop offers a Request Data Export function for its registered customers. It is possible to exploit a flaw in the feature to retrieve more data than intended. Injection attacks will not count to solve this one.
+
+* You should not try to steal data from a "vanilla" user who never even ordered something at the shop.
+* As everything about this data export functionality happens on the server-side, it won't be possible to just tamper with some HTTP requests to solve this challenge.
+* Inspecting various server responses which contain user-specific data might give you a clue about the mistake the developers made.
+
+##### Solution
+
+1. Log in as any user, put some items into your basket and create an order from these.
+2. Notice that you end up on a URL with a seemingly generated random part, like http://localhost:3000/#/order-completion/5267-829f123593e9d098
+3. On that Order Summary page, click on the Track Orders link under the Thank you for your purchase! message to end up on a URL simular to http://localhost:3000/#/track-result/new?id=5267-829f123593e9d098
+4. Open the network tab of your browser's DevTools and refresh that page. You should notice a request similar to http://localhost:3000/rest/track-order/5267-829f123593e9d098.
+5. Inspecting the response closely, you might notice that the user email address is partially obfuscated: {"status":"success","data":[{"orderId":"5267-829f123593e9d098","email":"*dm*n@j**c*-sh.*p","totalPrice":2.88,"products":[{"quantity":1,"name":"Apple Juice (1000ml)","price":1.99,"total":1.99,"bonus":0},{"quantity":1,"name":"Apple Pomace","price":0.89,"total":0.89,"bonus":0}],"bonus":0,"eta":"2","_id":"tosmfPsDaWcEnzRr3"}]}
+6. It looks like certain letters - seemingly all vowels - were replaced with * characters before the order was stored in the database.
+7. Register a new user with an email address that would result in the exact same obfuscated email address. For example register edmin@juice-sh.op to steal the data of admin@juice-sh.op.
+8. Log in with your new user and immediately get your data exported via http://localhost:3000/#/privacy-security/data-export.
+9. You will notice that the order belonging to the existing user admin@juice-sh.op (in this example 5267-829f123593e9d098) is part of your new user's data export due to the clash when obfuscating emails!
+
 ---
 
 ### Injection
