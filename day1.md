@@ -66,13 +66,16 @@ The Juice Shop allows users to provide general feedback including a star rating 
 * To find the client-side leverage point, closely analyze the HTML form used for feedback submission.
 * The backend-side leverage point is similar to some of the XSS challenges found in OWASP Juice Shop.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Go to the Contact Us form on http://localhost:3000/#/contact.
 2. Inspect the DOM of the form in your browser to spot this suspicious text field right at the top:
    `<input _ngcontent-c23 hidden id="userId" type="text" class="ng-untouched ng-pristine ng-valid">`
 3. In your browser's developer tools remove the hidden attribute from above \<input\> tag.
 4. The field should now be visible in your browser. Type any user's database identifier in there (other than your own if you are currently logged in) and submit the feedback.
+  
+ </details>
 
 #### Forged Review ⭐⭐⭐
 
@@ -82,12 +85,15 @@ The Juice Shop allows users to provide reviews of all the products. A user has t
 * Analyze the form used for review submission and try to find a leverage point.
 * This challenge is pretty similar to Post some feedback in another user's name challenge.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Select any product and write a review for it
 2. Submit the review while observing the Networks tab of your browser.
 3. Analyze the PUT request.
 4. Change the author name to admin@juice-sh.op in Request Body and re-send the request.
+  
+</details>
 
 #### View Basket ⭐⭐
 
@@ -97,7 +103,8 @@ This horizontal privilege escalation challenge demands you to access the shoppin
 * There might be a client-side association of user to basket that you can try to manipulate.
 * In case you manage to update the database via SQL Injection so that a user is linked to another shopping basket, the application will not notice this challenge as solved.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Log in as any user.
 2. Put some products into your shopping basket.
@@ -106,6 +113,8 @@ This horizontal privilege escalation challenge demands you to access the shoppin
 5. Visit http://localhost:3000/#/basket to solve the challenge.
 
 If the challenge is not immediately solved, you might have to F5-reload to relay the bid change to the Angular client.
+  
+</details>
 
 #### Manipulate Basket ⭐⭐⭐
 
@@ -115,7 +124,8 @@ View another user's shopping basket was only about spying out other customers. F
 * Adding more instances of the same product to someone else's basket does not qualify as a solution. The same goes for stealing from someone else's basket.
 * This challenge requires a bit more sophisticated tampering than others of the same ilk.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Log in as any user.
 2. Inspect HTTP traffic while putting items into your own shopping basket to learn your own BasketId. For this solution we assume yours is 1 and another user's basket with a BasketId of 2 exists.
@@ -143,6 +153,8 @@ View another user's shopping basket was only about spying out other customers. F
     ```
 
 6. Submitting this request will satisfy the validation based on your own BasketId but put the product into the other basket!
+  
+</details>
 
 #### Exposed Metrics ⭐
 
@@ -151,11 +163,14 @@ The popular monitoring system being referred to in the challenge description is 
 * The Juice Shop serves its metrics on the default path expected by Prometheus
 * Guessing the path is probably just as quick as taking the RTFM route via https://prometheus.io/docs/introduction/first_steps
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Scroll through https://prometheus.io/docs/introduction/first_steps
 2. You should notice several mentions of /metrics as the default path scraped by Prometheus, e.g. "Prometheus expects metrics to be available on targets on a path of /metrics."
 3. Visit http://localhost:3000/metrics to view the actual Prometheus metrics of the Juice Shop and solve this challenge
+  
+</details>
 
 ---
 
@@ -167,10 +182,13 @@ There is a hidden easter egg in the `/ftp` directory. Try to download it!
 
 When you open the easter egg file, you might be a little disappointed, as the developers taunt you about not having found the real easter egg! Of course finding that is a follow-up challenge to this one.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Use the Poison Null Byte attack
 2. ...to download http://localhost:3000/ftp/eastere.gg%2500.md
+  
+</details>
 
 #### Nested Easter Egg ⭐⭐⭐⭐
 
@@ -179,13 +197,16 @@ Solving the Find the hidden easter egg challenge was probably no as satisfying a
 * Make sure you solve Find the hidden easter egg first.
 * You might have to peel through several layers of tough-as-nails encryption for this challenge.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Get the encrypted string from the eastere.gg from the Find the hidden easter egg challenge: `L2d1ci9xcmlmL25lci9mYi9zaGFhbC9ndXJsL3V2cS9uYS9ybmZncmUvcnR0L2p2Z3V2YS9ndXIvcm5mZ3JlL3J0dA==`
 2. Base64-decode this into `/gur/qrif/ner/fb/shaal/gurl/uvq/na/rnfgre/rtt/jvguva/gur/rnfgre/rtt`
 3. Trying this as a URL will not work. Notice the recurring patterns (rtt, gur etc.) in the above string
 4. ROT13-decode this into `/the/devs/are/so/funny/they/hid/an/easter/egg/within/the/easter/egg`
 5. Visit http://localhost:3000/the/devs/are/so/funny/they/hid/an/easter/egg/within/the/easter/egg
+  
+</details>
 
 #### Access Log ⭐⭐⭐⭐
 
@@ -196,13 +217,16 @@ The Juice Shop application server is writing access logs, which can contain inte
 * One particular file found in the folder you might already have found during the Access a confidential document challenge might give you an idea who is interested in such a public exposure.
 * Drilling down one level into the file system might not be sufficient.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Solve the Access a confidential document or any related challenges which will bring the exposed /ftp folder to your attention.
 2. Visit http://localhost:3000/ftp and notice the file incident-support.kdbx which is needed for Log in with the support team's original user credentials and indicates that some support team is performing its duties from the public Internet and possibly with VPN access.
 3. Guess luckily or run a brute force attack with e.g. OWASP ZAPs DirBuster plugin for a possibly exposed directory containing the log files.
 4. Following the hint to drill down deeper than one level, you will at some point end up with http://localhost:3000/support/logs.
 5. Inside you will find at least one access.log of the current day. Open or download it to solve this challenge.
+  
+</details>
 
 #### GDPR Data Theft ⭐⭐⭐⭐
 
@@ -212,7 +236,8 @@ In order to comply with GDPR, the Juice Shop offers a Request Data Export functi
 * As everything about this data export functionality happens on the server-side, it won't be possible to just tamper with some HTTP requests to solve this challenge.
 * Inspecting various server responses which contain user-specific data might give you a clue about the mistake the developers made.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Log in as any user, put some items into your basket and create an order from these.
 2. Notice that you end up on a URL with a seemingly generated random part, like http://localhost:3000/#/order-completion/5267-829f123593e9d098
@@ -224,6 +249,8 @@ In order to comply with GDPR, the Juice Shop offers a Request Data Export functi
 8. Log in with your new user and immediately get your data exported via http://localhost:3000/#/privacy-security/data-export.
 9. You will notice that the order belonging to the existing user admin@juice-sh.op (in this example 5267-829f123593e9d098) is part of your new user's data export due to the clash when obfuscating emails!
 
+</details>
+  
 ---
 
 ### Injection
@@ -238,11 +265,14 @@ What would a vulnerable web application be without an administrator user account
 
 Note: It is possible to solve this without applying SQL Injection. You can, for exampel, simply try guessing the password. But do try to find the injection!
 
-##### Solution
-
+<details>
+  <summary>Solution</summary>
+  
 * With the email, append `'--` in the email-field and use any password
 * Wihtout the email, in the email-field, use `' or 1=1--` and any password
   * This will automatically authenticate the first entry in the `Users` table, which coincidentally happens to be the administrator
+  
+</details>
 
 #### Database Schema ⭐⭐⭐
 
@@ -253,7 +283,8 @@ An attacker would try to exploit SQL Injection to find out as much as possible a
 * You might have to tackle some query syntax issues step-by-step, basically hopping from one error to the next
 * As with Order the Christmas special offer of 2014 this cannot be achieved through the application frontend.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. From any errors seen during previous SQL Injection attempts you should know that SQLite is the relational database in use.
 2. Check https://www.sqlite.org/faq.html to learn in "(7) How do I list all tables/indices contained in an SQLite database" that the schema is stored in a system table `sqlite_master`.
@@ -274,6 +305,8 @@ An attacker would try to exploit SQL Injection to find out as much as possible a
 
 10. Next you get rid of the unwanted product results changing the query into something like `qwert')) UNION SELECT '1', '2', '3', '4', '5', '6', '7', '8', '9' FROM sqlite_master--` leaving only the "`UNION`ed" element in the result set
 11. The last step is to replace one of the fixed values with correct column name `sql`, which is why searching for `qwert')) UNION SELECT sql, '2', '3', '4', '5', '6', '7', '8', '9' FROM sqlite_master--` solves the challenge.
+  
+</details>
 
 #### User Credentials ⭐⭐⭐⭐
 
@@ -284,27 +317,34 @@ This challenge explains how a considerable number of companies were affected by 
 * You might have to tackle some query syntax issues step-by-step, basically hopping from one error to the next
 * As with Order the Christmas special offer of 2014 and Exfiltrate the entire DB schema definition via SQL Injection this cannot be achieved through the application frontend.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. During the Database Schema challenge you learned that the `/rest/products/search` endpoint is susceptible to SQL Injection into the `q` parameter.
 2. Searching for `qwert')) UNION SELECT id, email, password, '4', '5', '6', '7', '8', '9' FROM Users--` solves the challenge giving you a the list of all user data in convenient JSON format.
+  
+</details>
 
 #### DOM XSS ⭐
 
 Look for an XSS in the search box!
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Paste the attack string `<iframe src="javascript:alert(`xss`)">` into the Search... field.
 2. Hit the Enter key.
 3. An alert box with the text "xss" should appear.
+  
+</details>
 
 #### Reflected XSS ⭐⭐
 
 Look for a URL parameter where its value appears on the page it is leading to
 Try probing for XSS vulnerabilities by submitting text wrapped in an HTML tag which is easy to spot on screen, e.g. `<h1>` or `<strike>`.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Log in as any user.
 2. Do some shopping and then visit the Order History.
@@ -313,6 +353,8 @@ Try probing for XSS vulnerabilities by submitting text wrapped in an HTML tag wh
 5. As the fe01-f885a0915b79f2a9 is displayed on the screen, it might be susceptible to an XSS attack.
 6. Paste the attack string `<iframe src="javascript:alert(`xss`)">` into that URL so that you have http://localhost:3000/#/track-result?id=%3Ciframe%20src%3D%22javascript:alert(%60xss%60)%22%3E
 7. Refresh that URL to get the XSS payload executed and the challenge marked as solved.
+  
+</details>
 
 #### Server-side XSS Protection
 
@@ -325,7 +367,8 @@ When you actually understand a security mechanism you have a lot higher chance t
 * Look for possible dependencies related to input processing in the package.json.bak you harvested earlier
 * If an xss alert shows up but the challenge does not appear as solved on the Score Board, you might not have managed to put the exact attack string `<iframe src="javascript:alert(`xss`)">` into the database?
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 In the package.json.bak you might have noticed the pinned dependency "sanitize-html": "1.4.2". Internet research will yield a reported Cross-site Scripting (XSS) vulnerability, which was fixed with version 1.4.3 - one release later than used by the Juice Shop. The referenced GitHub issue explains the problem and gives an exploit example:
 
@@ -338,3 +381,5 @@ In the package.json.bak you might have noticed the pinned dependency "sanitize-h
 3. Choose a rating and click Submit
 4. Visit http://localhost:3000/#/about for a first "xss" alert (from the Customer Feedback slideshow)
 5. Visit http://localhost:3000/#/administration for a second "xss" alert (from the Customer Feedback table)
+
+</details>
