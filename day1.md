@@ -312,7 +312,7 @@ Look for an XSS in the search box!
 <details>
   <summary>Solution</summary>
 
-1. Paste the attack string `<iframe src="javascript:alert(`xss`)">` into the Search... field.
+1. Paste the attack string ``<iframe src="javascript:alert(`xss`)">`` into the Search... field.
 2. Hit the Enter key.
 3. An alert box with the text "xss" should appear.
   
@@ -331,7 +331,7 @@ Try probing for XSS vulnerabilities by submitting text wrapped in an HTML tag wh
 3. Clicking on the little "Truck" button for any of your orders will show you the delivery status of your order.
 4. Notice the id parameter in the URL http://localhost:3000/#/track-result?id=fe01-f885a0915b79f2a9 with fe01-f885a0915b79f2a9 being one of your order numbers?
 5. As the fe01-f885a0915b79f2a9 is displayed on the screen, it might be susceptible to an XSS attack.
-6. Paste the attack string `<iframe src="javascript:alert(`xss`)">` into that URL so that you have http://localhost:3000/#/track-result?id=%3Ciframe%20src%3D%22javascript:alert(%60xss%60)%22%3E
+6. Paste the attack string ``<iframe src="javascript:alert(`xss`)">`` into that URL so that you have http://localhost:3000/#/track-result?id=%3Ciframe%20src%3D%22javascript:alert(%60xss%60)%22%3E
 7. Refresh that URL to get the XSS payload executed and the challenge marked as solved.
   
 </details>
@@ -343,9 +343,9 @@ This is one of the hardest XSS challenges, as it cannot be solved by just fiddli
 When you actually understand a security mechanism you have a lot higher chance to beat or trick it somehow, than by using a trial and error approach.
 
 * The Comment field in the Contact Us screen is where you want to put your focus on
-* The attack payload `<iframe src="javascript:alert(`xss`)">` will not be rejected by any validator but stripped from the comment before persisting it
+* The attack payload ``<iframe src="javascript:alert(`xss`)">`` will not be rejected by any validator but stripped from the comment before persisting it
 * Look for possible dependencies related to input processing in the package.json.bak you harvested earlier
-* If an xss alert shows up but the challenge does not appear as solved on the Score Board, you might not have managed to put the exact attack string `<iframe src="javascript:alert(`xss`)">` into the database?
+* If an xss alert shows up but the challenge does not appear as solved on the Score Board, you might not have managed to put the exact attack string ``<iframe src="javascript:alert(`xss`)">`` into the database?
 
 <details>
   <summary>Solution</summary>
@@ -357,7 +357,7 @@ In the package.json.bak you might have noticed the pinned dependency "sanitize-h
 > Mitigation: Run sanitization recursively until the input html matches the output html.
 
 1. Visit http://localhost:3000/#/contact.
-2. Enter `<<script>Foo</script>iframe src="javascript:alert(`xss`)">` as Comment
+2. Enter ``<<script>Foo</script>iframe src="javascript:alert(`xss`)">`` as Comment
 3. Choose a rating and click Submit
 4. Visit http://localhost:3000/#/about for a first "xss" alert (from the Customer Feedback slideshow)
 5. Visit http://localhost:3000/#/administration for a second "xss" alert (from the Customer Feedback table)
