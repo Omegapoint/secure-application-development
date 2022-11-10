@@ -47,14 +47,17 @@ A general strategy:
 
 Find the hidden score board to track your progress.
 
-##### Solution
+<details>
+  <summary>Solution</summary>
 
 1. Go to the Sources tab of your browsers DevTools and open the main.js file.
 2. If your browser offers pretty-printing of this minified messy code, best use this offer. In Chrome this can be done with the "{}"-button.
 3. Search for score and iterate through each finding to come across one looking like a route mapping section:
 4. Navigate to http://localhost:3000/#/score-board to solve the challenge.
 5. From now on you will see the additional menu item Score Board in the navigation bar.
-
+   
+</details>
+   
 #### Forged Feedback ⭐⭐⭐
 
 The Juice Shop allows users to provide general feedback including a star rating and some free text comment. When logged in, the feedback will be associated with the current user. When not logged in, the feedback will be posted anonymously. This challenge is about vilifying another user by posting a (most likely negative) feedback in his or her name!
