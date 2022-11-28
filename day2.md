@@ -47,6 +47,8 @@ A general strategy:
 
 TODO
 
+---
+
 ### Security Misconfiguration
 
 #### Error Handling ⭐
@@ -85,6 +87,8 @@ Use a deprecated B2B interface that was not properly shut down.
 
 </details>
 
+---
+
 ### Vulnerable and Outdated Components
 
 #### Vulnerable Library ⭐⭐⭐⭐
@@ -119,6 +123,8 @@ Forge an essentially unsigned JWT token that impersonates the (non-existing) use
   7. Change the `Authorization` header of a subsequent request to the retrieved JWT (prefixed with `Bearer` as before) and submit the request. Alternatively you can set the `token` cookie to the JWT which be used to populate any future request with that header.
 
 </details>
+
+---
 
 ### Identification and Authentication Failures
 
@@ -178,13 +184,19 @@ Reset Bender's password via the Forgot Password mechanism with the truthful answ
 
 </details>
 
+---
+
 ### Software and Data Integrity Failures
 
 TODO
 
+---
+
 ### Security Logging and Monitoring Failures
 
 TODO
+
+---
 
 ### Server-Side Request Forgery
 
