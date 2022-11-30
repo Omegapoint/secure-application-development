@@ -183,30 +183,3 @@ Reset Bender's password via the Forgot Password mechanism with the truthful answ
   9. Click Change to solve this challenge
 
 </details>
-
----
-
-### Software and Data Integrity Failures
-
-TODO
-
----
-
-### Security Logging and Monitoring Failures
-
-TODO
-
----
-
-### Server-Side Request Forgery
-
-#### SSRF ⭐⭐⭐⭐⭐⭐
-
-Request a hidden resource on server through server.
-
-<details>
-<summary>Solution</summary>
-
-  1. TODO
-
-</details>
